@@ -1,5 +1,5 @@
 # Two-Dimensional-Time-To-Collision
-This repository allows for fast computation of two-dimensional Time-To-Collision (2D-TTC). This is particularly useful for evaluating the traffic conflict risk at intersections, but for sure can also be used in the scenario of highways. An explanatory document might be available later (not 100% sure though).
+This repository allows for fast computation of two-dimensional Time-To-Collision (2D-TTC). This is particularly useful for evaluating the traffic conflict risk at intersections, but for sure can also be used in the scenario of highways. An explanatory document might be available later (not 100% sure though :P).
 
 ## Libarary requirements
 Any versions of `pandas` and `numpy`.
