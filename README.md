@@ -21,9 +21,8 @@ ttc = TwoDimTTC.TTC(samples, 'values')
 ````
 ## Input
 The first input is a pandas dataframe of vehicle pair samples, which should include the following columns.
-`x_i`      :  x coordinate of the ego vehicle $i$ (usually assumed to be centroid)
-
-`y_i`      :  y coordinate of the ego vehicle $i$ (usually assumed to be centroid)
+- `x_i`      :  x coordinate of the ego vehicle $i$ (usually assumed to be centroid)
+- `y_i`      :  y coordinate of the ego vehicle $i$ (usually assumed to be centroid)
 
 `vx_i`     :  x coordinate of the velocity of the ego vehicle $i$
 
