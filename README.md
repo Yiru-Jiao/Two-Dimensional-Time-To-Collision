@@ -1,5 +1,5 @@
 # Two-Dimensional-Time-To-Collision
-This repository allows for fast computation of two-dimensional Time-To-Collision (2D TTC). This is particularly useful for evaluating the traffic conflict risk at intersections, but for sure can also be used in the scenario of highways.
+This repository allows for fast computation of two-dimensional Time-To-Collision (2D-TTC). This is particularly useful for evaluating the traffic conflict risk at intersections, but for sure can also be used in the scenario of highways.
 
 ## Libarary requirements
 Any versions of `pandas` and `numpy`.
@@ -13,7 +13,7 @@ import sys
 sys.path.append('') # add the path where you save this `.py` file
 import TwoDimTTC
 
-# To return a dataframe with the input vehicle pair samples, where 2D TTC as a new column named 'TTC'
+# To return a dataframe with the input vehicle pair samples, where 2D-TTC as a new column named 'TTC'
 samples = TwoDimTTC.TTC(samples, 'dataframe')
 
 # To return a numpy array of 2D TTC values
