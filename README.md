@@ -23,35 +23,20 @@ ttc = TwoDimTTC.TTC(samples, 'values')
 The first input is a pandas dataframe of vehicle pair samples, which should include the following columns.
 - `x_i`      :  x coordinate of the ego vehicle $i$ (usually assumed to be centroid)
 - `y_i`      :  y coordinate of the ego vehicle $i$ (usually assumed to be centroid)
-
-`vx_i`     :  x coordinate of the velocity of the ego vehicle $i$
-
-`vy_i`     :  y coordinate of the velocity of the ego vehicle $i$
-
-`hx_i`     :  x coordinate of the heading direction of the ego vehicle $i$
-
-`hy_i`     :  y coordinate of the heading direction of the ego vehicle $i$
-
-`length_i` :  length of the ego vehicle $i$
-
-`width_i`  :  width of the ego vehicle $i$
-
-`x_j`      :  x coordinate of another vehicle $j$ (usually assumed to be centroid)
-
-`y_j`      :  y coordinate of another vehicle $j$ (usually assumed to be centroid)
-
-`vx_j`     :  x coordinate of the velocity of another vehicle $j$
-
-`vy_j`     :  y coordinate of the velocity of another vehicle $j$
-
-`hx_j`     :  x coordinate of the heading direction of another vehicle $j$
-
-`hy_j`     :  y coordinate of the heading direction of another vehicle $j$
-
-`length_j` :  length of another vehicle $j$
-
-`width_j`  :  width of another vehicle $j$
-
+- `vx_i`     :  x coordinate of the velocity of the ego vehicle $i$
+- `vy_i`     :  y coordinate of the velocity of the ego vehicle $i$
+- `hx_i`     :  x coordinate of the heading direction of the ego vehicle $i$
+- `hy_i`     :  y coordinate of the heading direction of the ego vehicle $i$
+- `length_i` :  length of the ego vehicle $i$
+- `width_i`  :  width of the ego vehicle $i$
+- `x_j`      :  x coordinate of another vehicle $j$ (usually assumed to be centroid)
+- `y_j`      :  y coordinate of another vehicle $j$ (usually assumed to be centroid)
+- `vx_j`     :  x coordinate of the velocity of another vehicle $j$
+- `vy_j`     :  y coordinate of the velocity of another vehicle $j$
+- `hx_j`     :  x coordinate of the heading direction of another vehicle $j$
+- `hy_j`     :  y coordinate of the heading direction of another vehicle $j$
+- `length_j` :  length of another vehicle $j$
+- `width_j`  :  width of another vehicle $j$
 The second input allows outputing a dataframe with inputed samples plus a new column named 'TTC', or mere TTC values.
 
 ## Output
