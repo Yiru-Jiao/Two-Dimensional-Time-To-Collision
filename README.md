@@ -46,7 +46,7 @@ If `ttc==np.inf`, the ego vehicle $i$ and another vehicle $j$ will never collide
 A negative TTC means the boxes of the ego vehicle $i$ and another vehicle $j$ are overlapping. This is due to approximating the space occupied by a vehicle with a rectangular. In other words, `ttc<0` in this computation means the collision between the two vehicles almost (or although seldom, already) occurred.
 
 ## Efficiency
-The following table shows approximately needed computation time by averaging 10 times of test experiments.
+The following table shows approximately needed computation time (tested for 10 iterations of experiments).
 | number of vehicle pairs | computation time (s)|
 |-------|-------|
 | 1e4 | 0.082 |
