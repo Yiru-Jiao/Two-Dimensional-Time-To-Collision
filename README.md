@@ -37,7 +37,7 @@ The first input is a pandas dataframe of vehicle pair samples, which should incl
 - `hy_j`     :  y coordinate of the heading direction of another vehicle $j$
 - `length_j` :  length of another vehicle $j$
 - `width_j`  :  width of another vehicle $j$
-- 
+
 The second input allows outputing a dataframe with inputed samples plus a new column named 'TTC', or mere TTC values.
 
 ## Output
