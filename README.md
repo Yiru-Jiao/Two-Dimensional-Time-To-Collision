@@ -13,10 +13,10 @@ import sys
 sys.path.append('') # add the path where you save this `.py` file
 import TwoDimTTC
 
-# To return a dataframe with the input vehicle pair samples, where 2D-TTC as a new column named 'TTC'
+# To return a dataframe with the input vehicle pair samples, where 2D-TTC are saved in a new column named 'TTC'
 samples = TwoDimTTC.TTC(samples, 'dataframe')
 
-# To return a numpy array of 2D TTC values
+# To return a numpy array of 2D-TTC values
 ttc = TwoDimTTC.TTC(samples, 'values')
 ````
 ## Input
