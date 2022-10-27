@@ -1,7 +1,8 @@
 ########################################################################################################
 #
 # Use function TTC(samples, 'dataframe') or TTC(samples, 'values') to compute two-dimensional Time-To-Collision.
-#
+# When 'dataframe' is chosen, two columns ['CurrentD','TTC'] are added, 
+# where 'CurrentD' is the current distance between the vehicles and 'TTC' is 2D Time-To-Collision.
 #
 # The first input is a pandas dataframe of vehicle pair samples, which should include the following columns.
 # -----------------------------------------------------------------------------------
@@ -23,10 +24,9 @@
 # width_j  :  width of another vehicle                                              |
 #------------------------------------------------------------------------------------
 # The second input allows outputing a dataframe with inputed samples plus a new column named 'TTC', or mere TTC values.
-# 
 #
 # If TTC==np.inf, the ego vehicle and another vehicle will never collide if they keep current speed.
-# A negative TTC means the boxes of the ego vehicle and another vehicle are overlapping.
+# A negative TTC means the bounding boxes of the ego vehicle and another vehicle are overlapping.
 # This is due to approximating the space occupied by a vehicle with a rectangular.
 # In other words, TTC<0 in this computation means the collision between the two vehicles almost (or although seldom, already) occurred.
 #
@@ -93,9 +93,29 @@ def Dpoints(samples):
     point_j4 = (point_down - perp_heading_j/heading_scale_j*width_j/2).T
 
     dist_mat = []
+    # Distance from point to point
     for point_i in [point_i1, point_i2, point_i3, point_i4]:
         for point_j in [point_j1, point_j2, point_j3, point_j4]:
             dist = np.sqrt((point_i[0]-point_j[0])**2+(point_i[1]-point_j[1])**2)
+            dist_mat.append(dist)
+
+    # Distance from point to edge
+    for point_a, point_b in zip([point_i1, point_i2, point_i3, point_i4],[point_i3, point_i4, point_i1, point_i2]):
+        for point_line_a, point_line_b in zip([point_j1, point_j3, point_j1, point_j2],[point_j2, point_j4, point_j3, point_j4]):
+            point_c = point_a + np.array([-(point_line_a - point_line_b)[1], (point_line_a - point_line_b)[0]])
+            ist = intersect(line(point_a, point_c),line(point_line_a, point_line_b))
+            ist[:,~ison(ist, point_a, point_b)] = np.nan
+            dist = np.sqrt((ist[0]-point_a[0])**2+(ist[1]-point_a[1])**2)
+            dist[np.isnan(ist[0])] = np.inf
+            dist_mat.append(dist)
+
+    for point_a, point_b in zip([point_j1, point_j2, point_j3, point_j4],[point_j3, point_j4, point_j1, point_j2]):
+        for point_line_a, point_line_b in zip([point_i1, point_i3, point_i1, point_i2],[point_i2, point_i4, point_i3, point_i4]):
+            point_c = point_a + np.array([-(point_line_a - point_line_b)[1], (point_line_a - point_line_b)[0]])
+            ist = intersect(line(point_a, point_c),line(point_line_a, point_line_b))
+            ist[:,~ison(ist, point_a, point_b)] = np.nan
+            dist = np.sqrt((ist[0]-point_a[0])**2+(ist[1]-point_a[1])**2)
+            dist[np.isnan(ist[0])] = np.inf
             dist_mat.append(dist)
 
     return np.array(dist_mat).min(axis=0)
@@ -212,7 +232,7 @@ def TTC(samples, toreturn='dataframe'):
     else:
         line_start = samples[['x_i','y_i']].values.T
         line_end = (samples[['x_i','y_i']].values + samples[['vx_i','vy_i']].values - samples[['vx_j','vy_j']].values).T
-        line_end[:,samples.CurrentD<=0.5] = (samples[['x_i','y_i']].values + samples[['hx_i','hy_i']].values).T[:,samples.CurrentD<=0.5]
+        line_end[:,samples.CurrentD<=2] = (samples[['x_i','y_i']].values + samples[['hx_i','hy_i']].values).T[:,samples.CurrentD<=2]
 
         direct_v = line_end - line_start
         perp_direct_v = np.array([-direct_v[1],direct_v[0]])
