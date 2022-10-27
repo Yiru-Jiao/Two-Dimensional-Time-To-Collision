@@ -49,9 +49,9 @@ A negative TTC means the boxes of the ego vehicle $i$ and another vehicle $j$ ar
 The following table shows approximately needed computation time (tested for 10 iterations of experiments).
 | number of vehicle pairs | computation time (s)|
 |-------|-------|
-| 1e4 | 0.082 |
-| 1e5 | 0.960 |
-| 1e6 | 2.287 |
+| 1e4 | 0.0274 |
+| 1e5 | 0.2766 |
+| 1e6 | 4.5915 |
 
 ## Copyright
 Copyright (c) 2022 Yiru Jiao. All rights reserved.
