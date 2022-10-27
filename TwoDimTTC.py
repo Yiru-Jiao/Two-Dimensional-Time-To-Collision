@@ -63,7 +63,7 @@ def ison(line_start, line_end, point):
 def dist_p2l(point, line_start, line_end):
     return np.absolute((line_end[0]-line_start[0])*(line_start[1]-point[1])-(line_start[0]-point[0])*(line_end[1]-line_start[1]))/np.sqrt((line_end[0]-line_start[0])**2+(line_end[1]-line_start[1])**2)
 
-def Dpoints(samples):
+def getpoints(samples):
     ## vehicle i
     heading_i = samples[['hx_i','hy_i']].values
     perp_heading_i = np.array([-heading_i[:,1], heading_i[:,0]]).T
@@ -91,6 +91,11 @@ def Dpoints(samples):
     point_j2 = (point_up - perp_heading_j/heading_scale_j*width_j/2).T
     point_j3 = (point_down + perp_heading_j/heading_scale_j*width_j/2).T
     point_j4 = (point_down - perp_heading_j/heading_scale_j*width_j/2).T
+
+    return (point_i1, point_i2, point_i3, point_i4, point_j1, point_j2, point_j3, point_j4)
+
+def Dpoints(samples):
+    point_i1, point_i2, point_i3, point_i4, point_j1, point_j2, point_j3, point_j4 = getpoints(samples)
 
     dist_mat = []
     # Distance from point to point
@@ -216,6 +221,7 @@ def CurrentD(samples, toreturn='dataframe'):
         dist_inter = np.array([DTC(samples, ego='i'), DTC(samples, ego='j')]).min(axis=0)
         dist_points = Dpoints(samples)
         dist_inter[np.isinf(dist_inter)] = dist_points[np.isinf(dist_inter)]
+        dist_inter[dist_inter<0] = -1
         
         if toreturn=='dataframe':
             samples['CurrentD'] = dist_inter
@@ -226,58 +232,33 @@ def CurrentD(samples, toreturn='dataframe'):
 
 # Computation
 def TTC(samples, toreturn='dataframe'):
-    samples = CurrentD(samples, 'dataframe')
     if toreturn!='dataframe' and toreturn!='values':
         warnings.warn('Incorrect target to return. Please specify \'dataframe\' or \'values\'.')
     else:
-        line_start = samples[['x_i','y_i']].values.T
-        line_end = (samples[['x_i','y_i']].values + samples[['vx_i','vy_i']].values - samples[['vx_j','vy_j']].values).T
-        line_end[:,samples.CurrentD<=2] = (samples[['x_i','y_i']].values + samples[['hx_i','hy_i']].values).T[:,samples.CurrentD<=2]
-
-        direct_v = line_end - line_start
-        perp_direct_v = np.array([-direct_v[1],direct_v[0]])
-        direct_v_scale = np.tile(np.sqrt(direct_v[0]**2+direct_v[1]**2), (2,1))
-        point_line00 = line_start + perp_direct_v/direct_v_scale*np.tile(samples.width_i.values, (2,1))/2
-        point_line01 = point_line00 + direct_v
-        point_line10 = line_start - perp_direct_v/direct_v_scale*np.tile(samples.width_i.values, (2,1))/2
-        point_line11 = point_line10 + direct_v
-
-        heading = samples[['hx_j','hy_j']].values
-        perp_heading = np.array([-heading[:,1], heading[:,0]]).T
-        heading_scale = np.tile(np.sqrt(heading[:,0]**2+heading[:,1]**2), (2,1)).T
-        length = np.tile(samples.length_j.values, (2,1)).T
-        width = np.tile(samples.width_j.values, (2,1)).T
-
-        point_up = samples[['x_j','y_j']].values + heading/heading_scale*length/2
-        point_down = samples[['x_j','y_j']].values - heading/heading_scale*length/2
-        point1 = (point_up + perp_heading/heading_scale*width/2).T
-        point2 = (point_up - perp_heading/heading_scale*width/2).T
-        point3 = (point_down + perp_heading/heading_scale*width/2).T
-        point4 = (point_down - perp_heading/heading_scale*width/2).T
+        point_i1, point_i2, point_i3, point_i4, point_j1, point_j2, point_j3, point_j4 = getpoints(samples)
+        direct_v = (samples[['vx_i','vy_i']].values - samples[['vx_j','vy_j']].values).T
 
         dist_mat = []
-        ist_mat = []
-        for point_a, point_b in zip([point1, point3, point1, point2],[point2, point4, point3, point4]):
-            for point_line_a, point_line_b in zip([point_line00, point_line10],[point_line01, point_line11]):
+        leaving_mat = []
+        for point_line_start, point_line_end in zip([point_i1,point_i2,point_i3,point_i4],[point_i1+direct_v,point_i2+direct_v,point_i3+direct_v,point_i4+direct_v]):
+            for edge_start, edge_end in zip([point_j1, point_j3, point_j1, point_j2],[point_j2, point_j4, point_j3, point_j4]):
                 ### intersection point        
-                ist = intersect(line(point_a, point_b), line(point_line_a, point_line_b))
-                ist[:,~ison(point_a, point_b, ist)] = np.nan
-                ist_mat.append(ist)
-                ### distance from point to the relative velocity line
-                dist = dist_p2l(ist, line_start, line_end)
-                ### distance to start
-                dist_ist = np.sqrt((ist[0]-line_start[0])**2+(ist[1]-line_start[1])**2-dist**2)
+                ist = intersect(line(point_line_start, point_line_end), line(edge_start, edge_end))
+                ist[:,~ison(edge_start, edge_end, ist)] = np.nan
+                ### distance from point to intersection point
+                dist_ist = np.sqrt((ist[0]-point_line_start[0])**2+(ist[1]-point_line_start[1])**2)
                 dist_ist[np.isnan(dist_ist)] = np.inf
                 dist_mat.append(dist_ist)
+                leaving = direct_v[0]*(ist[0]-point_line_start[0]) + direct_v[1]*(ist[1]-point_line_start[1])
+                leaving[leaving>=0] = 10
+                leaving[leaving<0] = 1
+                leaving_mat.append(leaving)
 
-        dist2overlap = np.array(dist_mat).min(axis=0) - samples.length_i.values/2
-        point2overlap = np.array(ist_mat)[np.array(dist_mat).argmin(axis=0), :, np.arange(len(samples))]
-        direct_v = line_end - line_start
-        direct_p = point2overlap.T - line_start
-        leaving = (direct_v[0]*direct_p[0] + direct_v[1]*direct_p[1]) < 0
-        dist2overlap[leaving] = np.inf
-
+        dist2overlap = np.array(dist_mat).min(axis=0)
         TTC = dist2overlap/np.sqrt((samples.vx_i-samples.vx_j)**2+(samples.vy_i-samples.vy_j)**2)
+        leaving = np.nansum(np.array(leaving_mat),axis=0)
+        TTC[leaving<10] = np.inf
+        TTC[(leaving>10)&(leaving%10!=0)] = -1
 
         if toreturn=='dataframe':
             samples['TTC'] = TTC
