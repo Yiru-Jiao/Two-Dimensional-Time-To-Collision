@@ -28,6 +28,10 @@
 # This is due to approximating the space occupied by a vehicle with a rectangular.
 # In other words, TTC<0 in this computation means the collision between the two vehicles almost (or although seldom, already) occurred.
 #
+# *** Note that mere TTC computation can give a extreme small value even when the vehivles are overlapping a bit.
+#     In order to improve the accuracy, please use function CurrentD(samples, 'dataframe') or CurrentD(samples, 'values') to further
+#     exclude overlapping vehicles.
+#
 ########################## Copyright (c) 2022 Yiru Jiao <y.jiao-1@tudelft.nl> ###########################
 
 # Import
@@ -142,8 +146,9 @@ def TTC(samples, toreturn='dataframe'):
 
         dist_mat = []
         leaving_mat = []
-        for point_line_start, point_line_end in zip([point_i1,point_i2,point_i3,point_i4],[point_i1+direct_v,point_i2+direct_v,point_i3+direct_v,point_i4+direct_v]):
+        for point_line_start in [point_i1,point_i2,point_i3,point_i4]:
             for edge_start, edge_end in zip([point_j1, point_j3, point_j1, point_j2],[point_j2, point_j4, point_j3, point_j4]):
+                point_line_end = point_line_start+direct_v
                 ### intersection point        
                 ist = intersect(line(point_line_start, point_line_end), line(edge_start, edge_end))
                 ist[:,~ison(edge_start, edge_end, ist)] = np.nan
