@@ -1,8 +1,6 @@
 ########################################################################################################
 #
 # Use function TTC(samples, 'dataframe') or TTC(samples, 'values') to compute two-dimensional Time-To-Collision.
-# When 'dataframe' is chosen, two columns ['CurrentD','TTC'] are added, 
-# where 'CurrentD' is the current distance between the vehicles and 'TTC' is 2D Time-To-Collision.
 #
 # The first input is a pandas dataframe of vehicle pair samples, which should include the following columns.
 # -----------------------------------------------------------------------------------
