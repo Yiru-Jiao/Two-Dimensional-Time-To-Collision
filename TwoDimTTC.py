@@ -28,7 +28,7 @@
 # This is due to approximating the space occupied by a vehicle with a rectangular.
 # In other words, TTC<0 in this computation means the collision between the two vehicles almost (or although seldom, already) occurred.
 #
-# *** Note that mere TTC computation can give a extreme small value even when the vehivles are overlapping a bit.
+# *** Note that mere TTC computation can give an extreme small positive value even when the vehivles are overlapping a bit.
 #     In order to improve the accuracy, please use function CurrentD(samples, 'dataframe') or CurrentD(samples, 'values') to further
 #     exclude overlapping vehicles.
 #
@@ -104,8 +104,8 @@ def CurrentD(samples, toreturn='dataframe'):
 
         dist_mat = []
         count_i = 0
-        count_j = 0
         for point_i_start, point_i_end in zip([point_i1, point_i4, point_i3, point_i2],[point_i2, point_i3, point_i1, point_i4]):
+            count_j = 0
             for point_j_start, point_j_end in zip([point_j1, point_j4, point_j3, point_j2],[point_j2, point_j3, point_j1, point_j4]):
                 if count_i<2 and count_j<2 :
                     # Distance from point to point
