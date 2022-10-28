@@ -123,8 +123,8 @@ def CurrentD(samples, toreturn='dataframe'):
                 dist_mat.append(dist)
                 count_j += 1
             count_i += 1
-            
-        cdist = np.array(dist_mat).min(axis=0)
+
+        cdist = np.nanmin(np.array(dist_mat), axis=0)
 
         if toreturn=='dataframe':
             samples['CurrentD'] = cdist
