@@ -45,6 +45,20 @@ If `ttc==np.inf`, the ego vehicle $i$ and another vehicle $j$ will never collide
 
 A negative TTC means the boxes of the ego vehicle $i$ and another vehicle $j$ are overlapping. This is due to approximating the space occupied by a vehicle with a rectangular. In other words, `ttc<0` in this computation means the collision between the two vehicles almost (or although seldom, already) occurred.
 
+Note that mere TTC computation can give an extreme small positive value even when the vehivles are overlapping a bit. In order to improve the accuracy, please use function `CurrentD(samples, 'dataframe')` or `CurrentD(samples, 'values')` to further exclude overlapping vehicles. This function calculate current distance between the ego vehicle $i$ and another vehicle $j$, which indicate overlapping when the value is negative.
+
+````python   
+# Within pandas dataframe
+samples = TwoDimTTC.TTC(samples, 'dataframe')
+samples = TwoDimTTC.Current(samples, 'dataframe')
+samples.loc[(samples.CurrentD<0)&(samples.TTC<np.inf)&(samples.TTC>0),'TTC'] = -1
+
+# Using numpy array of values
+ttc = TwoDimTTC.TTC(samples, 'values')
+current_dist = TwoDimTTC.Current(samples, 'values')
+ttc[(current_dist<0)&(ttc<np.inf)&(ttc>0)] = -1
+````
+
 ## Efficiency
 The following table shows approximately needed computation time (tested for 10 iterations of experiments).
 | number of vehicle pairs | computation time (s)|
