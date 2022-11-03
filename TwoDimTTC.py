@@ -122,8 +122,8 @@ def CurrentD(samples, toreturn='dataframe'):
                 # Overlapped bounding boxes
                 ist = intersect(line(point_i_start, point_i_end), line(point_j_start, point_j_end))
                 dist = np.ones(len(samples))*np.nan
-                dist[ison(point_i_start, point_i_end, ist)&ison(point_j_start, point_j_end, ist)] = -1
-                dist[np.isnan(ist[0])&(ison(point_i_start, point_i_end, point_j_start)|ison(point_i_start, point_i_end, point_j_end))] = -1
+                dist[ison(point_i_start, point_i_end, ist)&ison(point_j_start, point_j_end, ist)] = 0
+                dist[np.isnan(ist[0])&(ison(point_i_start, point_i_end, point_j_start)|ison(point_i_start, point_i_end, point_j_end))] = 0
                 dist_mat.append(dist)
                 count_j += 1
             count_i += 1
