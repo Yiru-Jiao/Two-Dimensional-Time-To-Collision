@@ -51,8 +51,11 @@ def intersect(line0, line1):
     a0, b0, c0 = line0
     a1, b1, c1 = line1
     D = a0*b1 - a1*b0 # D==0 then two lines overlap
+    D[D==0] = np.nan
     x = (b0*c1 - b1*c0)/D
     y = (a1*c0 - a0*c1)/D
+    x[np.isnan(x)] = np.inf
+    y[np.isnan(y)] = np.inf
     return np.array([x, y])
 
 def ison(line_start, line_end, point):
