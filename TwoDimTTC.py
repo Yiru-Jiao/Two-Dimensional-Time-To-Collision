@@ -189,11 +189,11 @@ def TTC(samples, toreturn='dataframe'):
             return np.minimum(ttc_ij, ttc_ji)
 
 # Efficiency evaluation
-def efficiency(samples, times):
+def efficiency(samples, iterations):
     import time
     ts = []
-    for _ in range(times):
+    for _ in range(iterations):
         t = time.time()
         _ = TTC(samples, 'values')
         ts.append(time.time()-t)
-    return sum(ts)/times
+    return sum(ts)/iterations
