@@ -50,16 +50,27 @@ Note that mere TTC computation can give an extreme small positive value even whe
 ````python   
 # Within pandas dataframe
 samples = TwoDimTTC.TTC(samples, 'dataframe')
-samples = TwoDimTTC.Current(samples, 'dataframe')
+samples = TwoDimTTC.CurrentD(samples, 'dataframe')
 samples.loc[(samples.CurrentD<0)&(samples.TTC<np.inf)&(samples.TTC>0),'TTC'] = -1
 
 # Using numpy array of values
 ttc = TwoDimTTC.TTC(samples, 'values')
-current_dist = TwoDimTTC.Current(samples, 'values')
+current_dist = TwoDimTTC.CurrentD(samples, 'values')
 ttc[(current_dist<0)&(ttc<np.inf)&(ttc>0)] = -1
 ````
 
 ## Efficiency
+Use function `efficiency(samples, iterations)` to test the computation efficiency.
+
+For example,
+````python   
+import sys
+sys.path.append('') # add the path where you save this `.py` file
+import TwoDimTTC
+
+print('Average time cost = {:.4f} second(s)'.format(TwoDimTTC.efficiency(samples, 10)
+````
+
 The following table shows approximately needed computation time (tested for 10 iterations of experiments).
 | number of vehicle pairs | computation time (s)|
 |-------|-------|
