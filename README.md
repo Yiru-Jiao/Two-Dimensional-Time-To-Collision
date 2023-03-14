@@ -64,10 +64,6 @@ Use function `efficiency(samples, iterations)` to test the computation efficienc
 
 For example,
 ````python   
-import sys
-sys.path.append('') # add the path where you save this `.py` file
-import TwoDimTTC
-
 print('Average time cost = {:.4f} second(s)'.format(TwoDimTTC.efficiency(samples, 10)
 ````
 
