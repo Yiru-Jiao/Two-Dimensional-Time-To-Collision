@@ -138,40 +138,62 @@ def CurrentD(samples, toreturn='dataframe'):
             return samples
         elif toreturn=='values':
             return cdist
+        
+def TTC_ij(samples):
+    point_i1, point_i2, point_i3, point_i4, point_j1, point_j2, point_j3, point_j4 = getpoints(samples)
+    direct_v = (samples[['vx_i','vy_i']].values - samples[['vx_j','vy_j']].values).T
+
+    dist_mat = []
+    leaving_mat = []
+    for point_line_start in [point_i1,point_i2,point_i3,point_i4]:
+        for edge_start, edge_end in zip([point_j1, point_j3, point_j1, point_j2],[point_j2, point_j4, point_j3, point_j4]):
+            point_line_end = point_line_start+direct_v
+            ### intersection point        
+            ist = intersect(line(point_line_start, point_line_end), line(edge_start, edge_end))
+            ist[:,~ison(edge_start, edge_end, ist)] = np.nan
+            ### distance from point to intersection point
+            dist_ist = np.sqrt((ist[0]-point_line_start[0])**2+(ist[1]-point_line_start[1])**2)
+            dist_ist[np.isnan(dist_ist)] = np.inf
+            dist_mat.append(dist_ist)
+            leaving = direct_v[0]*(ist[0]-point_line_start[0]) + direct_v[1]*(ist[1]-point_line_start[1])
+            leaving[leaving>=0] = 10
+            leaving[leaving<0] = 1
+            leaving_mat.append(leaving)
+
+    dist2overlap = np.array(dist_mat).min(axis=0)
+    TTC = dist2overlap/np.sqrt((samples.vx_i-samples.vx_j)**2+(samples.vy_i-samples.vy_j)**2)
+    leaving = np.nansum(np.array(leaving_mat),axis=0)
+    TTC[leaving<10] = np.inf
+    TTC[(leaving>10)&(leaving%10!=0)] = -1
+
+    return TTC
 
 # Computation
+
 def TTC(samples, toreturn='dataframe'):
     if toreturn!='dataframe' and toreturn!='values':
         warnings.warn('Incorrect target to return. Please specify \'dataframe\' or \'values\'.')
     else:
-        point_i1, point_i2, point_i3, point_i4, point_j1, point_j2, point_j3, point_j4 = getpoints(samples)
-        direct_v = (samples[['vx_i','vy_i']].values - samples[['vx_j','vy_j']].values).T
-
-        dist_mat = []
-        leaving_mat = []
-        for point_line_start in [point_i1,point_i2,point_i3,point_i4]:
-            for edge_start, edge_end in zip([point_j1, point_j3, point_j1, point_j2],[point_j2, point_j4, point_j3, point_j4]):
-                point_line_end = point_line_start+direct_v
-                ### intersection point        
-                ist = intersect(line(point_line_start, point_line_end), line(edge_start, edge_end))
-                ist[:,~ison(edge_start, edge_end, ist)] = np.nan
-                ### distance from point to intersection point
-                dist_ist = np.sqrt((ist[0]-point_line_start[0])**2+(ist[1]-point_line_start[1])**2)
-                dist_ist[np.isnan(dist_ist)] = np.inf
-                dist_mat.append(dist_ist)
-                leaving = direct_v[0]*(ist[0]-point_line_start[0]) + direct_v[1]*(ist[1]-point_line_start[1])
-                leaving[leaving>=0] = 10
-                leaving[leaving<0] = 1
-                leaving_mat.append(leaving)
-
-        dist2overlap = np.array(dist_mat).min(axis=0)
-        TTC = dist2overlap/np.sqrt((samples.vx_i-samples.vx_j)**2+(samples.vy_i-samples.vy_j)**2)
-        leaving = np.nansum(np.array(leaving_mat),axis=0)
-        TTC[leaving<10] = np.inf
-        TTC[(leaving>10)&(leaving%10!=0)] = -1
+        ttc_ij = TTC_ij(samples)
+        keys = [var+'_i' for var in ['x','y','vx','vy','hx','hy','length','width']]
+        values = [var+'_j' for var in ['x','y','vx','vy','hx','hy','length','width']]
+        keys.extend(values)
+        values.extend(keys)
+        rename_dict = {keys[i]: values[i] for i in range(len(keys))}
+        ttc_ji = TTC_ij(samples.rename(columns=rename_dict))
 
         if toreturn=='dataframe':
-            samples['TTC'] = TTC
+            samples['TTC'] = np.minimum(ttc_ij, ttc_ji)
             return samples
         elif toreturn=='values':
-            return TTC
+            return np.minimum(ttc_ij, ttc_ji)
+
+# Efficiency evaluation
+def efficiency(samples, times):
+    import time
+    ts = []
+    for _ in range(times):
+        t = time.time()
+        _ = TTC(samples, 'values')
+        ts.append(time.time()-t)
+    return sum(ts)/times
