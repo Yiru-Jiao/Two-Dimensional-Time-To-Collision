@@ -63,9 +63,9 @@ ttc[(current_dist<0)&(ttc<np.inf)&(ttc>0)] = -1
 The following table shows approximately needed computation time (tested for 10 iterations of experiments).
 | number of vehicle pairs | computation time (s)|
 |-------|-------|
-| 1e4 | 0.0274 |
-| 1e5 | 0.2766 |
-| 1e6 | 4.5915 |
+| 1e4 | 0.0357 |
+| 1e5 | 0.4342 |
+| 1e6 | 7.1657 |
 
 ## Copyright
 Copyright (c) 2022 Yiru Jiao. All rights reserved.
