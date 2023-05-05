@@ -6,8 +6,8 @@ The table below lists the required variables for a pair of vehicles $i$ and $j$.
 | Variabbles of | vehicle $i$| vehicle $j$|
 |-------|-------|-------|
 | Centroids | $(x_i, y_i)$ |$(x_j, y_j)$|
-| Velocities | $(x_{\mathbf{v}_i}, y_{\boldsymbol{v}_i})$ | $(x_{\boldsymbol{v}_j}, y_{\boldsymbol{v}_j})$ |
-| Heading directions | $(x_{\boldsymbol{h}_i}, y_{\boldsymbol{h}_i})$ | $(x_{\boldsymbol{h}_j}, y_{\boldsymbol{h}_j})$ |
+| Velocities | $(x_{v_i}, y_{v_i})$ | $(x_{v_j}, y_{v_j})$ |
+| Heading directions | $(x_{h_i}, y_{h_i})$ | $(x_{h_j}, y_{h_j})$ |
 |Lengths ($l$) and widths ($w$)| $(l_i, w_i)$ | $(l_j, w_j)$|
 
 
