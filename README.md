@@ -6,9 +6,9 @@ The table below lists the required variables for a pair of vehicles $i$ and $j$.
 | Variabbles of | vehicle $i$| vehicle $j$|
 |-------|-------|-------|
 | Centroids | $(x_i, y_i)$ |$(x_j, y_j)$|
-| Velocities | $(x_{\boldsymbol{v}_i}, y_{\boldsymbol{v}_i})$ | $(x_{\boldsymbol{v}_j}, y_{\boldsymbol{v}_j})$ |
+| Velocities | $(x_{__v__ _i}, y_{\boldsymbol{v}_i})$ | $(x_{\boldsymbol{v}_j}, y_{\boldsymbol{v}_j})$ |
 | Heading directions | $(x_{\boldsymbol{h}_i}, y_{\boldsymbol{h}_i})$ | $(x_{\boldsymbol{h}_j}, y_{\boldsymbol{h}_j})$ |
-|Lengths ($l$) and widths ($w$)|& $(l_i, w_i)$ | $(l_j, w_j)$|
+|Lengths ($l$) and widths ($w$)| $(l_i, w_i)$ | $(l_j, w_j)$|
 
 
 ## Libarary requirements
