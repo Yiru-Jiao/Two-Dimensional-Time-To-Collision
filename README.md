@@ -10,6 +10,17 @@ The table below lists the required variables for a pair of vehicles $i$ and $j$.
 | Heading directions | $(x_{h_i}, y_{h_i})$ | $(x_{h_j}, y_{h_j})$ |
 |Lengths ($l$) and widths ($w$)| $(l_i, w_i)$ | $(l_j, w_j)$|
 
+In the one-dimensional case, TTC is calculated by dividing the relative distance (termed as Distance-to-Collision, DTC) by the relative speed. In the two dimensional case, DTC correspondingly refers to the minimum distance between the bounding boxes of vehicles along the direction of their relative velocity. If their relative movement decreases the distance, they are approaching each other, and a potential collision exists. Conversely, if their movement increases the distance, they are moving away from each other, and no potential collision exists.
+
+Fig. \ref{fig:2DTTC} illustrates the calculation of two-dimensional DTC. We first consider $i$ as the target vehicle and $j$ as another interacting vehicle, and then reverse their roles. Based on the centroids, vehicle vectors, and the dimensions of vehicles, we obtain the bounding box corner points $\boldsymbol{C}_i$ for vehicle $i$ and $\boldsymbol{C}_j$ for vehicle $j$, and subsequently their edges. For each corner point $c_i\in\boldsymbol{C}_i$, we draw a line in the direction of $\boldsymbol{v}_{ij}=\boldsymbol{v}_i-\boldsymbol{v}_j$. If any intersection points exist between the line and the bounding box edges of vehicle $j$, we record them as $\boldsymbol{k}_j$. For each pair formed by $\boldsymbol{c}_i$ and their corresponding $\boldsymbol{k}_j$, their distance is calculated using eq. \eqref{eq:distance} and a set $\boldsymbol{D}_{i\rightarrow j}$ is formed.
+
+$$
+    d_{i\rightarrow j} = \left\{
+    \begin{array}{ll}
+    \|\boldsymbol{k}_j-\boldsymbol{c}_i\|, & \text{ } (\boldsymbol{k}_j-\boldsymbol{c}_i)\boldsymbol{v}_{ij}\geq0\\
+    \inf, & \text{ } (\boldsymbol{k}_j-\boldsymbol{c}_i)\boldsymbol{v}_{ij}<0 \text{ or } \boldsymbol{k}_j \text{ does not exist}
+    \end{array}
+$$
 
 ## Libarary requirements
 Any versions of `pandas` and `numpy`.
