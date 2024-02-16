@@ -54,8 +54,8 @@ def intersect(line0, line1):
     D[D==0] = np.nan
     x = (b0*c1 - b1*c0)/D
     y = (a1*c0 - a0*c1)/D
-    x[np.isnan(x)] = np.inf
-    y[np.isnan(y)] = np.inf
+#    x[np.isnan(x)] = np.inf
+#   y[np.isnan(y)] = np.inf
     return np.array([x, y])
 
 def ison(line_start, line_end, point):
