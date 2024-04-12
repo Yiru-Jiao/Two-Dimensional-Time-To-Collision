@@ -3,6 +3,18 @@ This repository allows for fast computation of two-dimensional Time-To-Collision
 
 Note that this method follows the typical definition of TTC assuming constant velocity at the time moment of evaluation. This clearly differs from alternative definitions of 2D-TTC such as time advantage or predicted PET (https://doi.org/10.1016/j.aap.2010.03.021). Due to the drawback of the constant-velocity assumption, this method may not suit well for slow and conscious interactions.
 
+If you use this software in your work, please cite it using the following metadata:
+```latex
+@software{Jiao_A_fast_calculation_2023,
+author = {Jiao, Yiru},
+month = mar,
+title = {{A fast calculation of two-dimensional Time-to-Collision}},
+url = {https://github.com/Yiru-Jiao/Two-Dimensional-Time-To-Collision},
+version = {1.0.0},
+year = {2023}
+}
+```
+
 ## Libarary requirements
 Any versions of `pandas` and `numpy`.
 
