@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Jiao"
+  given-names: "Yiru"
+  orcid: "https://orcid.org/0000-0001-5009-2642"
+title: "A fast calculation of two-dimensional Time-to-Collision"
+version: 1.0.0
+date-released: 2024-04-12
+url: "https://github.com/Yiru-Jiao/Two-Dimensional-Time-To-Collision"
