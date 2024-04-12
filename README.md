@@ -5,12 +5,11 @@ Note that this method follows the typical definition of TTC assuming constant ve
 
 If you use this software in your work, please cite it using the following metadata:
 ```latex
-@software{Jiao_A_fast_calculation_2023,
+@software{jiao2023ttc,
 author = {Jiao, Yiru},
 month = mar,
 title = {{A fast calculation of two-dimensional Time-to-Collision}},
 url = {https://github.com/Yiru-Jiao/Two-Dimensional-Time-To-Collision},
-version = {1.0.0},
 year = {2023}
 }
 ```
