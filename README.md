@@ -4,7 +4,7 @@ This repository allows for fast computation of two-dimensional Time-To-Collision
 Note that this method follows the typical definition of TTC assuming constant velocity at the time moment of evaluation (a reference can be found [here](https://www.ictct.net/wp-content/uploads/SMoS_Library/LIB_Tarko_2018.pdf)) as shown in the figure below. This clearly differs from alternative definitions of 2D-TTC such as time advantage or predicted PET (https://doi.org/10.1016/j.aap.2010.03.021). Due to the drawback of the constant-velocity assumption, this method may not suit well for slow and conscious interactions.
 
 <p align="center">
-  [<img src="./TTC_Hayward.png" width="600" class="center"/>](./TTC_Hayward.png)
+  <img src="./TTC_Hayward.png" width="600"/>
 </p>
 
 If you use this software in your work, please cite it using the following metadata:
