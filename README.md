@@ -1,7 +1,8 @@
 # Two-Dimensional-Time-To-Collision
 This repository allows for fast computation of two-dimensional Time-To-Collision (2D-TTC). This is particularly useful for evaluating the traffic conflict risk at intersections, but for sure can also be used in the scenario of highways. A document explaining the methods is provided [here](A_fast_calculation_of_2DTTC.pdf).
 
-Note that this method follows the typical definition of TTC assuming constant velocity at the time moment of evaluation. This clearly differs from alternative definitions of 2D-TTC such as time advantage or predicted PET (https://doi.org/10.1016/j.aap.2010.03.021). Due to the drawback of the constant-velocity assumption, this method may not suit well for slow and conscious interactions.
+Note that this method follows the typical definition of TTC assuming constant velocity at the time moment of evaluation (a reference can be found [here](https://www.ictct.net/wp-content/uploads/SMoS_Library/LIB_Tarko_2018.pdf)) as shown in the figure below. This clearly differs from alternative definitions of 2D-TTC such as time advantage or predicted PET (https://doi.org/10.1016/j.aap.2010.03.021). Due to the drawback of the constant-velocity assumption, this method may not suit well for slow and conscious interactions.
+![png](./TTC_Hayward.png)
 
 If you use this software in your work, please cite it using the following metadata:
 ```latex
