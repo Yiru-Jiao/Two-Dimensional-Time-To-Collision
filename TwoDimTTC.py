@@ -62,8 +62,7 @@ def ison(line_start, line_end, point):
     crossproduct = (point[1]-line_start[1])*(line_end[0]-line_start[0]) - (point[0]-line_start[0])*(line_end[1]-line_start[1])
     dotproduct = (point[0]-line_start[0])*(line_end[0]-line_start[0]) + (point[1]-line_start[1])*(line_end[1]-line_start[1])
     squaredlength = (line_end[0]-line_start[0])**2 + (line_end[1]-line_start[1])**2
-
-    return (np.absolute(crossproduct)<=1e5)&(dotproduct>=0)&(dotproduct<=squaredlength)
+    return (np.absolute(crossproduct)<=1e-5)&(dotproduct>=0)&(dotproduct<=squaredlength)
 
 def dist_p2l(point, line_start, line_end):
     return np.absolute((line_end[0]-line_start[0])*(line_start[1]-point[1])-(line_start[0]-point[0])*(line_end[1]-line_start[1]))/np.sqrt((line_end[0]-line_start[0])**2+(line_end[1]-line_start[1])**2)
