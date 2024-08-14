@@ -1,7 +1,7 @@
 # Two-Dimensional-Time-To-Collision
 This repository allows for fast computation of two-dimensional Time-To-Collision (2D-TTC). This is particularly useful for evaluating the traffic conflict risk at intersections, but for sure can also be used in the scenario of highways. 
 
-A document explaining my computation is provided [here](A_fast_calculation_of_2DTTC.pdf), where the core idea is $TTC=DTC/||\boldsymbol{v}_{ij}||$ and $DTC$ means a distance to collision, as shown in the figure below.
+A document explaining my computation is provided [here](A_fast_calculation_of_2DTTC.pdf), where the core idea is $TTC=DTC/\|\boldsymbol{v}_{ij}\|$ and $DTC$ means a distance to collision, as shown in the figure below.
 
 <p align="center">
   <img src="DTC_Yiru.svg" alt="animated" width="100%" height="100%"/>
