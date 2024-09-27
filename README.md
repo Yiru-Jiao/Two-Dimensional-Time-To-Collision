@@ -39,7 +39,7 @@ samples = TwoDimTTC.TTC(samples, 'dataframe')
 ttc = TwoDimTTC.TTC(samples, 'values')
 ````
 ## Input
-The first input is a pandas dataframe of vehicle pair samples, which should include the following columns.
+The first input is a pandas dataframe of vehicle pair samples, which should include the following columns. Note that the heading direction of a vehicle is not necessarily the direction of its velocity, especially when the vehicle is stopping or steering. The heading (hx, hy) is normalized to a unit vector in this function.
 - `x_i`      :  x coordinate of the ego vehicle $i$ (usually assumed to be centroid)
 - `y_i`      :  y coordinate of the ego vehicle $i$ (usually assumed to be centroid)
 - `vx_i`     :  x coordinate of the velocity of the ego vehicle $i$
