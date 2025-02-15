@@ -297,18 +297,24 @@ def MTTC(samples, toreturn='dataframe'):
         ttc = np.minimum(ttc_ij, ttc_ji)
         dtc = np.minimum(dtc_ij, dtc_ji)
 
-        acc_i = samples['acc_i'].values
+        if 'acc_j' in samples.columns:
+            acc_i = samples['acc_i'].values
+            acc_j = samples['acc_j'].values
+            delta_a = acc_i - acc_j
+        else: # assume acc_j=0 (i.e., the other vehicle keeps current velocity)
+            acc_i = samples['acc_i'].values
+            delta_a = acc_i
         delta_v = delta_v*np.sign(((leaving_ij>=20)|(leaving_ji>=20)).astype(int)-0.5) # if the two vehicles are leaving each other, the relative velocity is set negative
-        squared_term = delta_v**2 + 2*acc_i*dtc
+        squared_term = delta_v**2 + 2*delta_a*dtc
         squared_term[squared_term>=0] = np.sqrt(squared_term[squared_term>=0])
         squared_term[squared_term<0] = np.nan
-        mttc_plus = (-delta_v + squared_term) / acc_i
-        mttc_minus = (-delta_v - squared_term) / acc_i
+        mttc_plus = (-delta_v + squared_term) / delta_a
+        mttc_minus = (-delta_v - squared_term) / delta_a
         mttc = mttc_minus.copy()
         mttc[(mttc_minus<=0)&(mttc_plus>0)] = mttc_plus[(mttc_minus<=0)&(mttc_plus>0)]
         mttc[(mttc_minus<=0)&(mttc_plus<=0)] = np.inf
         mttc[(np.isnan(mttc_minus)|np.isnan(mttc_plus))] = np.inf
-        mttc[abs(acc_i)<1e-6] = ttc[abs(acc_i)<1e-6]
+        mttc[abs(delta_a)<1e-6] = ttc[abs(delta_a)<1e-6]
         mttc[((leaving_ij>20)&(leaving_ij%20!=0))|((leaving_ji>20)&(leaving_ji%20!=0))] = -1
 
         if toreturn=='dataframe':
@@ -321,6 +327,8 @@ def MTTC(samples, toreturn='dataframe'):
 def TTC_DRAC_MTTC(samples, toreturn='dataframe'):
     if toreturn!='dataframe' and toreturn!='values':
         warnings.warn('Incorrect target to return. Please specify \'dataframe\' or \'values\'.')
+    elif 'acc_i' not in samples.columns:
+        warnings.warn('Acceleration of the ego vehicle is not provided.')
     else:
         delta_v = np.sqrt((samples['vx_i']-samples['vx_j'])**2+(samples['vy_i']-samples['vy_j'])**2)
         dtc_ij, leaving_ij = DTC_ij(samples)
@@ -348,18 +356,24 @@ def TTC_DRAC_MTTC(samples, toreturn='dataframe'):
         ttc = np.minimum(ttc_ij, ttc_ji)
         drac = np.maximum(drac_ij, drac_ji)
 
-        acc_i = samples['acc_i'].values
+        if 'acc_j' in samples.columns:
+            acc_i = samples['acc_i'].values
+            acc_j = samples['acc_j'].values
+            delta_a = acc_i - acc_j
+        else: # assume acc_j=0 (i.e., the other vehicle keeps current velocity)
+            acc_i = samples['acc_i'].values
+            delta_a = acc_i
         delta_v = delta_v*np.sign(((leaving_ij>=20)|(leaving_ji>=20)).astype(int)-0.5) # if the two vehicles are leaving each other, the relative velocity is set negative
-        squared_term = delta_v**2 + 2*acc_i*dtc
+        squared_term = delta_v**2 + 2*delta_a*dtc
         squared_term[squared_term>=0] = np.sqrt(squared_term[squared_term>=0])
         squared_term[squared_term<0] = np.nan
-        mttc_plus = (-delta_v + squared_term) / acc_i
-        mttc_minus = (-delta_v - squared_term) / acc_i
+        mttc_plus = (-delta_v + squared_term) / delta_a
+        mttc_minus = (-delta_v - squared_term) / delta_a
         mttc = mttc_minus.copy()
         mttc[(mttc_minus<=0)&(mttc_plus>0)] = mttc_plus[(mttc_minus<=0)&(mttc_plus>0)]
         mttc[(mttc_minus<=0)&(mttc_plus<=0)] = np.inf
         mttc[(np.isnan(mttc_minus)|np.isnan(mttc_plus))] = np.inf
-        mttc[abs(acc_i)<1e-6] = ttc[abs(acc_i)<1e-6]
+        mttc[abs(delta_a)<1e-6] = ttc[abs(delta_a)<1e-6]
         mttc[((leaving_ij>20)&(leaving_ij%20!=0))|((leaving_ji>20)&(leaving_ji%20!=0))] = -1
 
         if toreturn=='dataframe':
