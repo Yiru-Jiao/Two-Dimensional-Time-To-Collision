@@ -5,7 +5,7 @@ These indicators are particularly useful for benchmarking and evaluating the col
 
 A document explaining my computation is provided [here](A_fast_calculation_of_2DTTC.pdf), where the core idea is $TTC=\frac{DTC}{\|\boldsymbol{v}_{ij}\|}$ and $DTC$ means a distance to collision, as shown in the figure below. This enables parallel computation with matrix operations, thus significantly improving computing efficiency for large-scale samples. 
 
-Following the same logic, ${DRAC}={\|\boldsymbol{v}_{ij}\|}^2/2/DTC$; $MTTC=(-\|\boldsymbol{v}_{ij}\|\pm\sqrt{{\|\boldsymbol{v}_{ij}\|}^2+2(\boldsymbol{a}_i-\boldsymbol{a}_j)DTC})/(\boldsymbol{a}_i-\boldsymbol{a}_j)$ and are further filtered according to [Ozbay et al. (2008)](https://doi.org/10.3141/2083-12). 
+Following the same logic, ${DRAC}={\|\boldsymbol{v}_{ij}\|}^2/2/{DTC}$; ${MTTC}=(-\|\boldsymbol{v}_{ij}\|\pm\sqrt{{\|\boldsymbol{v}_{ij}\|}^2+2(\boldsymbol{a}_i-\boldsymbol{a}_j){DTC}})/(\boldsymbol{a}_i-\boldsymbol{a}_j)$ and are further filtered according to [Ozbay et al. (2008)](https://doi.org/10.3141/2083-12). 
 
 <p align="center">
   <img src="assets/DTC_Yiru.svg" alt="animated" width="90%" height="90%"/>
