@@ -29,6 +29,7 @@ vx_j     :  x coordinate of the velocity of another vehicle                     
 vy_j     :  y coordinate of the velocity of another vehicle                                                |
 hx_j     :  x coordinate of the heading direction of another vehicle                                       |
 hy_j     :  y coordinate of the heading direction of another vehicle                                       |
+acc_j    :  acceleration along the heading direction of another vehicle (optional)                         |
 length_j :  length of another vehicle                                                                      |
 width_j  :  width of another vehicle                                                                       |
 ------------------------------------------------------------------------------------------------------------
