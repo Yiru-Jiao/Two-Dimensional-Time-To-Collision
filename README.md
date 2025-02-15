@@ -1,15 +1,17 @@
 # Two-Dimensional-Time-To-Collision
-This repository allows for fast computation of two-dimensional Time-To-Collision (2D-TTC). This is particularly useful for evaluating the traffic conflict risk at intersections, but for sure can also be used in the scenario of highways. 
+This repository was initiated in 2022 Oct. to allow for fast computation of two-dimensional Time-To-Collision (2D-TTC), and updated in 2023 Mar. as well as 2024 May. For a more diverse comparison, In 2025 Feb., new surrogate safety measures, i.e., Deceleration Rate to Avoid Collision (DRAC) and Modified Time-To-Collision (MTTC), are added following the same computation logic.
 
-A document explaining my computation is provided [here](A_fast_calculation_of_2DTTC.pdf), where the core idea is $TTC=\frac{DTC}{\|\boldsymbol{v}_{ij}\|}$ and $DTC$ means a distance to collision, as shown in the figure below.
+These indicators are particularly useful for benchmarking and evaluating the collision risk in urban traffic (e.g., at intersections), but for sure can also be used in the scenario of longitudinal highway traffic. 
+
+A document explaining my computation is provided [here](A_fast_calculation_of_2DTTC.pdf), where the core idea is $TTC=\frac{DTC}{\|\boldsymbol{v}_{ij}\|}$ and $DTC$ means a distance to collision, as shown in the figure below. This enables parallel computation with matrix operations, thus significantly improving computing efficiency for large-scale samples. Following the same logic, $DRAC=\frac{\|\boldsymbol{v}_{ij}\|^2}{2DTC}$; $MTTC=\frac{-\|\boldsymbol{v}_{ij}\|\pm\sqrt{\|\boldsymbol{v}_{ij}\|^2+2(\boldsymbol{a}_i-\boldsymbol{a}_j)DTC}}{\boldsymbol{a}_i-\boldsymbol{a}_j}$ and are further filtered according to [Ozbay et al. (2008)](https://doi.org/10.3141/2083-12). 
 
 <p align="center">
-  <img src="DTC_Yiru.svg" alt="animated" width="90%" height="90%"/>
+  <img src="assets/DTC_Yiru.svg" alt="animated" width="90%" height="90%"/>
 </p>
 
-Note that this method follows the typical definition of TTC assuming constant velocity at the time moment of evaluation (a reference can be found [here](https://www.ictct.net/wp-content/uploads/SMoS_Library/LIB_Tarko_2018.pdf)). This clearly differs from alternative definitions of 2D-TTC such as time advantage or predicted PET (https://doi.org/10.1016/j.aap.2010.03.021). Due to the drawback of the constant-velocity assumption, this method may not suit well for slow and conscious interactions.
+__Note__ that this method follows the classic definition of TTC assuming constant velocity at the time moment of evaluation (a reference can be found [here](https://www.ictct.net/wp-content/uploads/SMoS_Library/LIB_Tarko_2018.pdf)). This clearly differs from alternative definitions such as the 2D-TTC by [Guo et al. (2023)](https://doi.org/10.1016/j.aap.2023.107063) or Time Advantage (TAdv, [Laureshyn et al., 2010](https://doi.org/10.1016/j.aap.2010.03.021)). Due to the drawback of the constant-velocity assumption, this method may not suit well for slow and conscious interactions.
 
-If you use this software in your work, please cite it using the following metadata:
+If you use this software in your work, please kindly cite it using the following metadata:
 ```latex
 @software{jiao2023ttc,
 author = {Jiao, Yiru},
@@ -24,12 +26,11 @@ year = {2023}
 Any versions of `pandas` and `numpy`.
 
 ## Usage
-Use function `TTC(samples, 'dataframe')` or `TTC(samples, 'values')` to compute two-dimensional Time-To-Collision.
+The folder `src` includes two scripts, of which `TwoDimTTC` computes TTC only and `TwoDimSSM` computes TTC, DRAC, and MTTC. You may use the following example for computation.
 
-For example,
 ````python   
 import sys
-sys.path.append('') # add the path where you save this `.py` file
+sys.path.append('') # add the path where you save `TwoDimTTC.py` file
 import TwoDimTTC
 
 # To return a dataframe with the input vehicle pair samples, where 2D-TTC are saved in a new column named 'TTC'
@@ -38,6 +39,25 @@ samples = TwoDimTTC.TTC(samples, 'dataframe')
 # To return a numpy array of 2D-TTC values
 ttc = TwoDimTTC.TTC(samples, 'values')
 ````
+
+````python   
+import sys
+sys.path.append('') # add the path where you save `TwoDimSSM.py` file
+import TwoDimSSM
+
+# To return a dataframe with the input vehicle pair samples, where the indicators are saved in new columns
+samples = TwoDimSSM.TTC(samples, 'dataframe')
+samples = TwoDimSSM.DRAC(samples, 'dataframe')
+samples = TwoDimSSM.MTTC(samples, 'dataframe')
+# or compute all indicators at once
+samples = TwoDimSSM.TTC_DRAC_MTTC(samples, 'dataframe')
+
+# To return a numpy array of the indicator values, change `dataframe` to `values`
+indicator_func = TwoDimSSM.TTC # or TwoDimSSM.DRAC or TwoDimSSM.MTTC or TwoDimSSM.TTC_DRAC_MTTC
+indicator = indicator_func(samples, 'values')
+````
+
+
 ## Input
 The first input is a pandas dataframe of vehicle pair samples, which should include the following columns. Note that the heading direction of a vehicle is not necessarily the direction of its velocity, especially when the vehicle is stopping or steering. The heading (hx, hy) is normalized to a unit vector in this function.
 - `x_i`      :  x coordinate of the ego vehicle $i$ (usually assumed to be centroid)
@@ -46,6 +66,7 @@ The first input is a pandas dataframe of vehicle pair samples, which should incl
 - `vy_i`     :  y coordinate of the velocity of the ego vehicle $i$
 - `hx_i`     :  x coordinate of the heading direction of the ego vehicle $i$
 - `hy_i`     :  y coordinate of the heading direction of the ego vehicle $i$
+- `acc_i`    :  acceleration along the heading direction of the ego vehicle $i$ (only required if computing MTTC)
 - `length_i` :  length of the ego vehicle $i$
 - `width_i`  :  width of the ego vehicle $i$
 - `x_j`      :  x coordinate of another vehicle $j$ (usually assumed to be centroid)
@@ -54,18 +75,22 @@ The first input is a pandas dataframe of vehicle pair samples, which should incl
 - `vy_j`     :  y coordinate of the velocity of another vehicle $j$
 - `hx_j`     :  x coordinate of the heading direction of another vehicle $j$
 - `hy_j`     :  y coordinate of the heading direction of another vehicle $j$
+- `acc_j`    :  acceleration along the heading direction of another vehicle $j$ (optional)
 - `length_j` :  length of another vehicle $j$
 - `width_j`  :  width of another vehicle $j$
 
 The second input allows outputing a dataframe with inputed samples plus a new column named 'TTC', or mere TTC values.
 
 ## Output
-If `ttc==np.inf`, the ego vehicle $i$ and another vehicle $j$ will never collide if they keep current speed.
+The ego vehicle $i$ and another vehicle $j$ will never collide if they keep current speed when 
+  - indicator==np.inf when indicator==TTC or indicator==MTTC, or
+  - indicator==0 when indicator==DRAC.
 
-A negative TTC means the boxes of the ego vehicle $i$ and another vehicle $j$ are overlapping. This is due to approximating the space occupied by a vehicle with a rectangular. In other words, `ttc<0` in this computation means the collision between the two vehicles almost (or although seldom, already) occurred.
+A negative indicator value means the boxes of the ego vehicle $i$ and another vehicle $j$ are overlapping. This is due to approximating the space occupied by a vehicle with a rectangular. In other words, `indicator<0` in this computation means the collision between the two vehicles almost (or although seldom, already) occurred.
 
-Note that mere TTC computation can give an extreme small positive value even when the vehivles are overlapping a bit. In order to improve the accuracy, please use function `CurrentD(samples, 'dataframe')` or `CurrentD(samples, 'values')` to further exclude overlapping vehicles. This function calculate current distance between the ego vehicle $i$ and another vehicle $j$, which indicate overlapping when the value is negative.
+Note that the computation can return extreme small positive values (for TTC/MTTC) or extreme large values (for DRAC) even when the vehivles overlap a bit (so should be negative values). In order to improve the accuracy, please use function `CurrentD(samples, 'dataframe')` or `CurrentD(samples, 'values')` to further exclude overlapping vehicles. This function calculate current distance between the ego vehicle $i$ and another vehicle $j$, which indicate overlapping when the value is negative.
 
+For example,
 ````python   
 # Within pandas dataframe
 samples = TwoDimTTC.TTC(samples, 'dataframe')
