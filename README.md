@@ -12,8 +12,8 @@ where $DTC$ means a distance to collision, as shown in the figure below.
 </p>
 
 This enables parallel computation with matrix operations, thus significantly improving computing efficiency for large-scale samples. Following the same logic, 
-$$DRAC=\frac{\|\boldsymbol{v}_{ij}\|^2}{2DTC};$$ 
-$$MTTC=\frac{-\|\boldsymbol{v}_{ij}\|\pm\sqrt{\|\boldsymbol{v}_{ij}\|^2+2(\boldsymbol{a}_i-\boldsymbol{a}_j)DTC}}{\boldsymbol{a}_i-\boldsymbol{a}_j}$$ 
+$$DRAC=\frac{\Vert\boldsymbol{v}_{ij}\Vert^2}{DTC};$$ 
+$$MTTC=\frac{-\Vert\boldsymbol{v}_{ij}\Vert\pm\sqrt{\Vert\boldsymbol{v}_{ij}\Vert^2+2(\boldsymbol{a}_i-\boldsymbol{a}_j)DTC}}{\boldsymbol{a}_i-\boldsymbol{a}_j}$$ 
 and are further filtered according to [Ozbay et al. (2008)](https://doi.org/10.3141/2083-12). 
 
 __Note__ that this method follows the classic definition of TTC assuming constant velocity at the time moment of evaluation (a reference can be found [here](https://www.ictct.net/wp-content/uploads/SMoS_Library/LIB_Tarko_2018.pdf)). This clearly differs from alternative definitions such as the 2D-TTC by [Guo et al. (2023)](https://doi.org/10.1016/j.aap.2023.107063) or Time Advantage (TAdv, [Laureshyn et al., 2010](https://doi.org/10.1016/j.aap.2010.03.021)). Due to the drawback of the constant-velocity assumption, this method may not suit well for slow and conscious interactions.
