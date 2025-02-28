@@ -12,7 +12,7 @@ where $DTC$ means a distance to collision, as shown in the figure below.
 </p>
 
 This enables parallel computation with matrix operations, thus significantly improving computing efficiency for large-scale samples. Following the same logic, 
-$${DRAC}=\frac{\Vert\boldsymbol{v}_{ij}\Vert^2}{2DTC};$$ 
+$$DRAC=\frac{{\Vert\boldsymbol{v}_{ij}\Vert}^2}{2DTC};$$ 
 $$MTTC=\frac{-\Vert\boldsymbol{v}_{ij}\Vert\pm\sqrt{\Vert\boldsymbol{v}_{ij}\Vert^2+2(\boldsymbol{a}_i-\boldsymbol{a}_j)DTC}}{\boldsymbol{a}_i-\boldsymbol{a}_j}$$ 
 and are further filtered according to [Ozbay et al. (2008)](https://doi.org/10.3141/2083-12). 
 
