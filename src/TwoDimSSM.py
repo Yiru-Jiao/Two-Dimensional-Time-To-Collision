@@ -266,7 +266,7 @@ def DRAC(samples, toreturn='dataframe'):
         drac_ji[(leaving_ji>20)&(leaving_ji%20!=0)] = -1
 
         if toreturn=='dataframe':
-            samples['TTC'] = np.maximum(drac_ij, drac_ji)
+            samples['DRAC'] = np.maximum(drac_ij, drac_ji)
             return samples
         elif toreturn=='values':
             return np.maximum(drac_ij, drac_ji)
@@ -318,7 +318,7 @@ def MTTC(samples, toreturn='dataframe'):
         mttc[((leaving_ij>20)&(leaving_ij%20!=0))|((leaving_ji>20)&(leaving_ji%20!=0))] = -1
 
         if toreturn=='dataframe':
-            samples['TTC'] = mttc
+            samples['MTTC'] = mttc
             return samples
         elif toreturn=='values':
             return mttc
