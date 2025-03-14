@@ -20,7 +20,7 @@ This enables parallel computation with matrix operations, thus significantly imp
 and are further filtered according to [Ozbay et al. (2008)](https://doi.org/10.3141/2083-12).
 
 
-__Note__ that this method follows the classic definition of TTC assuming constant velocity at the time moment of evaluation (a reference can be found [here](https://www.ictct.net/wp-content/uploads/SMoS_Library/LIB_Tarko_2018.pdf)). This clearly differs from alternative definitions such as the 2D-TTC by [Guo et al. (2023)](https://doi.org/10.1016/j.aap.2023.107063) or Time Advantage (TAdv, [Laureshyn et al., 2010](https://doi.org/10.1016/j.aap.2010.03.021)). Due to the drawback of the constant-velocity assumption, this method may not suit well for slow and conscious interactions.
+__Note__ that this method follows the classic definition of TTC assuming constant velocity at the time moment of evaluation (a reference can be found [here](https://www.ictct.net/wp-content/uploads/SMoS_Library/LIB_Tarko_2018.pdf)). Due to the drawback of the constant-velocity assumption, this method may not suit well for slow and conscious interactions. This also clearly differs from alternative definitions such as the 2D-TTC by [Guo et al. (2023)](https://doi.org/10.1016/j.aap.2023.107063) or Time Advantage (TAdv, [Laureshyn et al., 2010](https://doi.org/10.1016/j.aap.2010.03.021)), for an implementation of which another repository [SSMsOnPlane](https://github.com/Yiru-Jiao/SSMsOnPlane) is referred to. 
 
 If you use this software in your work, please kindly cite it using the following metadata:
 ```latex
