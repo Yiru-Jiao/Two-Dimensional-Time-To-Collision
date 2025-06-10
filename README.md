@@ -1,3 +1,4 @@
+![badgen](https://api.infinitescript.com/badgen/count?name=Yiru-Jiao/Two-Dimensional-Time-To-Collision/readme)
 # Two-Dimensional-Time-To-Collision
 This repository was initiated in 2022 Oct. to allow for fast computation of two-dimensional Time-To-Collision (2D-TTC), and updated in 2023 Mar. as well as 2024 May. For a more diverse comparison, In 2025 Feb., new surrogate safety measures, i.e., Deceleration Rate to Avoid Collision (DRAC) and Modified Time-To-Collision (MTTC), are added following the same computation logic.
 
